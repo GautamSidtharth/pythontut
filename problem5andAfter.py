@@ -39,6 +39,7 @@ def getLast(primes):
     return primes[len(primes)-1]
 
 def getNextPrime (prime):
+    if(prime == 2): return 3
     nextOddNumber=prime+2
     while isPrime(nextOddNumber)==False:
         nextOddNumber+=2
@@ -73,7 +74,6 @@ def pro3():
     print('problem 3')
     print(getPrimeFactors(13195))
     print(getPrimeFactors(600851475143)) # 8 minutes
-
 
 ####################
 def pro5 ():
@@ -203,12 +203,22 @@ def pro9():
 ################
 def pro10():
     print('problem 10')
-    print()
+    print(sumGetAListOfPrimesLessThan(10)) #17
+    print(sumGetAListOfPrimesLessThan(2000000)) #142913828922
 
-# pro3()
-# pro5()
-# pro6()
-# pro7()
-# pro8()
-# pro9()
+def sumGetAListOfPrimesLessThan(lessThan):
+    sum=0
+    nextPrime=2
+    while nextPrime<lessThan:
+        if(nextPrime>1000000): print(nextPrime,sum)
+        sum+=nextPrime
+        nextPrime=getNextPrime(nextPrime)
+    return sum
+
 pro10()
+# pro9()
+# pro8()
+# pro7()
+# pro6()
+# pro5()
+# pro3()
