@@ -280,36 +280,93 @@ def product(listOfNumbers):
     return reduce(lambda x, y: x*y,listOfNumbers)
 
 def iterateGrid(grid,action,numberOfAdjacents):
-    for lessRowsGrid in iter(selectAdjacentRows(numberOfAdjacents,grid),None):
-        for lessRowsAndLessColumnsGrid in iter(selectAdjacentColumns(numberOfAdjacents,lessRowsGrid),None):
+    for lessRowsGrid in iter(getRowWiseIterator(numberOfAdjacents,grid),None):
+        for lessRowsAndLessColumnsGrid in iter(getColumnWiseIterator(numberOfAdjacents,lessRowsGrid),None):
             action(lessRowsAndLessColumnsGrid)
     return True
 
 def getGrid(stringGrid):
     return list(map(lambda stringLine: list(map(int,stringLine.split())),stringGrid.splitlines()))
 
-def selectAdjacentRows(numberOfAdjacents,grid):
+# def getRowWiseIterator(numberOfRowsAtATime,grid):
+#     startingIndex=0
+#     def iterator():
+#         nonlocal startingIndex
+#         rowLevelSelection=grid[startingIndex:startingIndex+numberOfRowsAtATime]
+#         if(len(rowLevelSelection)!=numberOfRowsAtATime): return None
+#         startingIndex+=1
+#         return rowLevelSelection
+#     return iterator
+def getRowWiseIterator(numberOfRowsAtATime,grid):
     startingIndex=0
-    def iterator():
+    def infiniteIterator():
         nonlocal startingIndex
-        selectedAdjacents=grid[startingIndex:startingIndex+numberOfAdjacents]
-        if(len(selectedAdjacents)!=numberOfAdjacents): return None
+        rowLevelSelection=grid[startingIndex:startingIndex+numberOfRowsAtATime]
         startingIndex+=1
-        return selectedAdjacents
-    return iterator
+        return rowLevelSelection
+    def toBeHalted(rowLevelSelection):
+        return len(rowLevelSelection)!=numberOfRowsAtATime
+    return generateIterator(infiniteIterator,toBeHalted)
 
-def selectAdjacentColumns(numberOfAdjacents,grid):
+# def getColumnWiseIterator(numberOfColumnsAtATime,grid):
+#     startingIndex=0
+#     def iterator():
+#         nonlocal startingIndex
+#         selector=lambda row:row[startingIndex:startingIndex+numberOfColumnsAtATime]
+#         columnLevelSelection=list(map(selector,grid))
+#         if(any(map(lambda row:len(row)!=numberOfColumnsAtATime,columnLevelSelection))): return None
+#         startingIndex+=1
+#         return columnLevelSelection
+#     return iterator
+#
+def getColumnWiseIterator(numberOfColumnsAtATime,grid):
     startingIndex=0
-    def iterator():
+    def infiniteIterator():
         nonlocal startingIndex
-        selector=lambda row:row[startingIndex:startingIndex+numberOfAdjacents]
+        selector=lambda row:row[startingIndex:startingIndex+numberOfColumnsAtATime]
         columnLevelSelection=list(map(selector,grid))
-        if(any(map(lambda row:len(row)!=numberOfAdjacents,columnLevelSelection))): return None
         startingIndex+=1
         return columnLevelSelection
-    return iterator
 
-pro11()
+    def toBeHalted(columnLevelSelection):
+        return any(map(lambda row:len(row)!=numberOfColumnsAtATime,columnLevelSelection))
+
+    return generateIterator(infiniteIterator,toBeHalted)
+
+def generateIterator(infiniteSequenceGenerator,toBeHalted):
+    def iterator():
+        next=infiniteSequenceGenerator()
+        return None if (toBeHalted(next)==True) else next
+    return iterator
+#############
+def pro12():
+    print("problem 12")
+    for x in iter(getInfiterTriangleNumberSeriesIterator(),None): print(x)
+
+def getInfiterTriangleNumberSeriesIterator():
+    startingIndex=0
+    triangleNumber=0
+    def infiniteIterator():
+        nonlocal startingIndex,triangleNumber
+        startingIndex+=1
+        triangleNumber+=startingIndex
+        return triangleNumber
+    def toBeHalted(trianlgeNumber):
+        primeFactors=getFactors(trianlgeNumber)
+        if(len(primeFactors)>500): return True
+        print(len(primeFactors),trianlgeNumber)
+    return generateIterator(infiniteIterator,toBeHalted)
+
+def getFactors(targetNumber):
+    primeFactors = getPrimeFactors(targetNumber)
+    allFactors = getAllFactors(targetNumber,primeFactors)
+    return allFactors
+
+def getAllFactors():
+
+
+pro12()
+# pro11()
 # pro10()
 # pro9()
 # pro8()
