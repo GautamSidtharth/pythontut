@@ -341,7 +341,18 @@ def generateIterator(infiniteSequenceGenerator,toBeHalted):
 #############
 def pro12():
     print("problem 12")
-    for x in iter(getInfiterTriangleNumberSeriesIterator(),None): print(x)
+    print(getTraingleNumberWhoHasOver500Divisors())
+    # print(len(getAllFactors(76564125)))
+    # print(len(getAllFactors(76576500)))
+
+def getTraingleNumberWhoHasOver500Divisors():
+    trianlgeNumber=1
+    allFactors=[]
+    getNextTriangleNumber=getInfiterTriangleNumberSeriesIterator()
+    while(len(allFactors)<500):
+        trianlgeNumber=getNextTriangleNumber()
+        allFactors=getAllFactors(trianlgeNumber)
+    return trianlgeNumber
 
 def getInfiterTriangleNumberSeriesIterator():
     startingIndex=0
@@ -351,19 +362,19 @@ def getInfiterTriangleNumberSeriesIterator():
         startingIndex+=1
         triangleNumber+=startingIndex
         return triangleNumber
-    def toBeHalted(trianlgeNumber):
-        primeFactors=getFactors(trianlgeNumber)
-        if(len(primeFactors)>500): return True
-        print(len(primeFactors),trianlgeNumber)
-    return generateIterator(infiniteIterator,toBeHalted)
+    return infiniteIterator
 
-def getFactors(targetNumber):
-    primeFactors = getPrimeFactors(targetNumber)
-    allFactors = getAllFactors(targetNumber,primeFactors)
+def getAllFactors(targetNumber):
+    upperLimit=targetNumber
+    divisor=1
+    allFactors=[]
+    while(divisor<upperLimit):
+        if(divisibleBy(targetNumber,divisor)):
+            upperLimit=targetNumber/divisor
+            allFactors.append(divisor)
+            if(divisor<upperLimit): allFactors.append(upperLimit)
+        divisor+=1
     return allFactors
-
-def getAllFactors():
-
 
 pro12()
 # pro11()
