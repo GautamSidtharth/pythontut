@@ -407,7 +407,13 @@ def getFirstTenDigitsOfTheSumOfAllNumbers(stringGrid):
             break
     result = str(sumationFound)[0:numberOfDigitsToBeFound]
     return result
-pro13()
+
+################
+def pro14():
+    print("problem 14")
+
+pro14()
+# pro13()
 # pro12()
 # pro11()
 # pro10()
